@@ -11,11 +11,11 @@ if (Bullet == null)
 
 function Update ()
 {
-	if (Input.GetButtonDown("Fire1")
+	if (Input.GetButtonDown("Fire1"))
 	{
-	var clone : Rigidbody;
+		var clone : GameObject;
 		clone = Instantiate (Bullet, transform.position, transform.rotation);
 		
-		clone.velocity = transform.TransformDirection (Vector3.forward * speed);
+		clone.GetComponent.<Rigidbody>().velocity = transform.TransformDirection (Vector3.forward * speed);
 	}
 }
