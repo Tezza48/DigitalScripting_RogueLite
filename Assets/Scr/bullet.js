@@ -6,7 +6,7 @@ public var speed = 20;
 function Start ()
 {
 if (Bullet == null)
-	Bullet = GameObject.FindWithTag ("Bullet")
+	Bullet = GameObject.FindWithTag ("Bullet");
 }
 
 function Update ()
