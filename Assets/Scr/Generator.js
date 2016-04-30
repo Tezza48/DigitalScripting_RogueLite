@@ -41,6 +41,7 @@ function Start ()
 	
 	spawnedWalls = new List.<GameObject>();
 	spawnedFloors = new List.<GameObject>();
+	spawnedEnemies = new List.<GameObject>();
 	spawnedTorches = new List.<GameObject>();
 
 	SpawnNextDungeon(false);
@@ -58,6 +59,7 @@ function SpawnNextDungeon(clear)
 		ClearDungeon();
 	DrunkenWalk();
 	AddTorches();
+	AddEnemies();	
 	AddPlayer();
 }
 
@@ -212,6 +214,41 @@ function AddTorches()
 			spawnedTorches.Add(newTorch);
 		}
 		torchCounter++;
+	}
+}
+
+function AddEnemies ()
+{
+	//make a list of positions from the list of spawned floors
+	var openSpaces = new List.<Vector3>();
+	var i : int;
+	for (i = 0; i < spawnedFloors.Count; i++)
+	{
+		openSpaces.Add(spawnedFloors[i].transform.position);
+	}
+	//randomly remove open spaces until we have the desired number of spawns
+	while (openSpaces.Count > enemiesToSpawn)
+	{
+		i = Random.Range(0, openSpaces.Count);
+		openSpaces.RemoveAt(i);
+	}
+	//spawn torches at those positions
+	var enemyCounter = 0;
+	var newEnemy : GameObject;
+	for (i = 0; i < openSpaces.Count; i++)
+	{
+		if (enemyCounter < spawnedEnemies.Count)
+		{
+			spawnedEnemies[enemyCounter].SetActive(true);
+			spawnedEnemies[enemyCounter].transform.position = openSpaces[i];
+		}
+		else
+		{
+			newEnemy = Instantiate(EnemyPrefab, openSpaces[i], Quaternion.identity);
+			newEnemy.transform.SetParent(dungeonParent.transform);
+			spawnedEnemies.Add(newEnemy);
+		}
+		enemyCounter++;
 	}
 }
 
