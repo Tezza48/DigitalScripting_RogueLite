@@ -2,13 +2,17 @@
 import System.Collections.Generic;
 
 @Header("Settings")
-@Range(10, 100)
+@Range(10, 50)
+@Tooltip("Best performance is under 40*40.")
 public var width : int = 30;
-@Range(10, 100)
+@Range(10, 50)
+@Tooltip("Best performance is under 40*40.")
 public var height : int = 30;
-@Range(10, 900)
-public var cellsToClear : int = 500;
-@Range (0, 100)
+@Range(10, 500)
+@Tooltip("A larger value will clear more space.\nIn a larger dungeon, the same value will likely\ncreate a more sparse like dungeon.")
+public var cellsToClear : int = 300;
+@Range (0, 60)
+@Tooltip("Best performance is under 30.")
 public var torchesToPlace : int = 30;
 
 public var enemiesToSpawn : int;
@@ -44,16 +48,18 @@ function Start ()
 	spawnedEnemies = new List.<GameObject>();
 	spawnedTorches = new List.<GameObject>();
 
-	SpawnNextDungeon(false);
+	SpawnNextDungeon(false, 0f);
 }
 
 function Update () 
 {
-	if(Input.GetKeyUp(KeyCode.Space))
-		SpawnNextDungeon(true);
+	Debug.Log((1/Time.deltaTime).ToString("N0") + "Fps");
+	var t = Time.time;
+	if(Input.GetKeyDown(KeyCode.Space))
+		SpawnNextDungeon(true, t);
 }
 
-function SpawnNextDungeon(clear)
+function SpawnNextDungeon(clear, t : int)
 {
 	if (clear)
 		ClearDungeon();
@@ -61,6 +67,7 @@ function SpawnNextDungeon(clear)
 	AddTorches();
 	AddEnemies();	
 	AddPlayer();
+	Debug.Log(Time.time*1000 - t*1000 + "ms");
 }
 
 function DrunkenWalk()
