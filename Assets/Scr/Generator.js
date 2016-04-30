@@ -2,11 +2,11 @@
 import System.Collections.Generic;
 
 @Header("Settings")
-@Range(10, 50)
+@Range(10, 100)
 public var width : int = 30;
-@Range(10, 50)
+@Range(10, 100)
 public var height : int = 30;
-@Range(10, 3000)
+@Range(10, 900)
 public var cellsToClear : int = 500;
 @Range (0, 100)
 public var torchesToPlace : int = 30;
@@ -28,6 +28,7 @@ private var spawnedWalls : List.<GameObject>;
 private var spawnedFloors : List.<GameObject>;
 private var spawnedEnemies : List.<GameObject>;
 private var spawnedTorches : List.<GameObject>;
+private var spawnedPlayer : GameObject;
 
 function Start ()
 {
@@ -41,32 +42,42 @@ function Start ()
 	spawnedWalls = new List.<GameObject>();
 	spawnedFloors = new List.<GameObject>();
 	spawnedTorches = new List.<GameObject>();
-	
+
+	SpawnNextDungeon(false);
+}
+
+function Update () 
+{
+	if(Input.GetKeyUp(KeyCode.Space))
+		SpawnNextDungeon(true);
+}
+
+function SpawnNextDungeon(clear)
+{
+	if (clear)
+		ClearDungeon();
+	DrunkenWalk();
+	AddTorches();
+	AddPlayer();
+}
+
+function DrunkenWalk()
+{
+	var x = 0;
+	var y = 0;
 	//init cells
-	for(var y = 0; y < height; y++)
+	for(y = 0; y < height; y++)
 	{
-		for(var x = 0; x < width; x++)
+		for(x = 0; x < width; x++)
 		{
 			//1 is a wall
 			cells[x,y] = 1;
 		}
 	}
-
-	SpawnNextDungeon();
-}
-
-function SpawnNextDungeon()
-{
-	//ClearDungeon();
-	DrunkenWalk();
-	AddTorches();
-}
-
-function DrunkenWalk()
-{
+	
 	//count the number of cells we've cleared
-	var clearedCells = 0;
-	var startPosition : Vector2 = new Vector2(Random.Range(1, width-1), Random.Range(1, height-1));
+	var clearedCells = 1;
+	var startPosition : Vector2 = new Vector2(Mathf.Max(width / 2), Mathf.Max(height / 2));
 	var lastPosition : Vector2 = startPosition;
 	
 	cells[startPosition.x, startPosition.y] = 0;
@@ -118,27 +129,53 @@ function DrunkenWalk()
 	}
 
 	//instantiation
-	for(var y = 0; y < height; y++)
+	//counters for using the object pools
+	var floorCounter = 0;
+	var wallCounter = 0;
+	for(y = 0; y < height; y++)
 	{
-		for(var x = 0; x < width; x++)
+		for(x = 0; x < width; x++)
 		{
 			var newTile : GameObject;
 			var currentCell = cells[x, y];
 			switch (currentCell) {
 				case 0:
-					//isntantiate the floor prefab
-					newTile = Instantiate(FloorPrefab, new Vector3(x, 0, y), Quaternion.identity);
-					//add that tile to a list to help with respawning the dungeon, could use this as an object pool for optimisation.
-					spawnedFloors.Add(newTile);
+					if (floorCounter < spawnedFloors.Count) 
+					{
+						//move the floor
+						//newTile = spawnedFloors[floorCounter];
+						spawnedFloors[floorCounter].SetActive(true);
+						spawnedFloors[floorCounter].transform.position = new Vector3(x, 0, y);
+					}
+					else
+					{
+						//isntantiate the floor prefab
+						newTile = Instantiate(FloorPrefab, new Vector3(x, 0, y), Quaternion.identity);
+						//add that tile to a list to help with respawning the dungeon, could use this as an object pool for optimisation.
+						spawnedFloors.Add(newTile);
+						//make the tile a child of a parent object to make the hierarchy more tidy
+						newTile.transform.SetParent(dungeonParent.transform);
+					}
+					floorCounter++;
 					break;
 				case 1:
-					//instantiate the wall prefab
-					newTile = Instantiate(WallPrefab, new Vector3(x, 0, y), Quaternion.identity);
-					spawnedWalls.Add(newTile);
+					if (wallCounter < spawnedWalls.Count)
+					{
+						//newTile = spawnedWalls[wallCounter];
+						spawnedWalls[wallCounter].SetActive(true);
+						spawnedWalls[wallCounter].transform.position = new Vector3(x, 0, y);
+					}
+					else
+					{
+						//instantiate the wall prefab
+						newTile = Instantiate(WallPrefab, new Vector3(x, 0, y), Quaternion.identity);
+						spawnedWalls.Add(newTile);
+						//make the tile a child of a parent object to make the hierarchy more tidy
+						newTile.transform.SetParent(dungeonParent.transform);
+					}
+					wallCounter++;
 					break;
 			}
-			//make the tile a child of a parent object to make the hierarchy more tidy
-			newTile.transform.SetParent(dungeonParent.transform);
 		}
 	}
 }
@@ -158,34 +195,61 @@ function AddTorches()
 		i = Random.Range(0, openSpaces.Count);
 		openSpaces.RemoveAt(i);
 	}
-	//spawn torches at topse positions
+	//spawn torches at those positions
+	var torchCounter = 0;
+	var newTorch : GameObject;
 	for (i = 0; i < openSpaces.Count; i++)
 	{
-		Instantiate(TorchPrefab, openSpaces[i], Quaternion.identity);
+		if (torchCounter < spawnedTorches.Count)
+		{
+			spawnedTorches[torchCounter].SetActive(true);
+			spawnedTorches[torchCounter].transform.position = openSpaces[i];
+		}
+		else
+		{
+			newTorch = Instantiate(TorchPrefab, openSpaces[i], Quaternion.identity);
+			newTorch.transform.SetParent(dungeonParent.transform);
+			spawnedTorches.Add(newTorch);
+		}
+		torchCounter++;
 	}
+}
+
+function AddPlayer () 
+{
+	//get the index for a random floor tile;
+	var randTileIndex = Random.Range(0, spawnedFloors.Count);
+	var spawnPos = spawnedFloors[randTileIndex].transform.position + Vector3.up/2;
+	if (spawnedPlayer == null)
+		spawnedPlayer = Instantiate(PlayerPrefab, spawnPos, Quaternion.identity);
+	else
+		spawnedPlayer.transform.position = spawnPos;
 }
 
 function ClearDungeon()
 {
 	var i : int;
+	cells = new int[width, height];
 	//clear Walls
 	for (i = 0; i < spawnedFloors.Count; i++)
 	{
-		Destroy(spawnedFloors[i]);
+		spawnedFloors[i].SetActive(false);
 	}
 	//clear Floors
 	for (i = 0; i < spawnedWalls.Count; i++)
 	{
-		Destroy(spawnedWalls[i]);
+		spawnedWalls[i].SetActive(false);
 	}
+	/*
 	//clear Enemies
 	for (i = 0; i < spawnedEnemies.Count; i++)
 	{
 		Destroy(spawnedEnemies[i]);
 	}
+	*/
 	//clear Torches
 	for (i = 0; i < spawnedTorches.Count; i++)
 	{
-		Destroy(spawnedTorches[i]);
+		spawnedTorches[i].SetActive(false);
 	}
 }
