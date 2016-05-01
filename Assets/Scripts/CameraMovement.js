@@ -3,7 +3,8 @@
 var CamSpeed = 1.00;
 var GUIsize = 25;
 
-function Update () {
+function Update () 
+{
 var recdown = Rect (0, 0, Screen.width, GUIsize);
 var recup = Rect (0, Screen.height-GUIsize, Screen.width, GUIsize);
 var recleft = Rect (0, 0, GUIsize, Screen.height);
