@@ -1,6 +1,4 @@
-﻿//written by jayme mousa
-
-#pragma strict
+﻿#pragma strict
 
 var CamSpeed = 1.00;
 var GUIsize = 25;
