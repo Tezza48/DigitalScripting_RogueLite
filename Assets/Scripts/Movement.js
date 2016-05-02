@@ -28,9 +28,9 @@ function Update()
 */
 }
 
-if (Input.GetMouseButtonDown(0)){
-		var newShot:GameObject = Instantiate(Shot, transform.position, transform.rotation) as GameObject;
-	}
+//if (Input.GetMouseButtonDown(0)){
+	//	var newShot:GameObject = Instantiate(Shot, transform.position, transform.rotation) as GameObject;
+	//}
 														
 
 	
