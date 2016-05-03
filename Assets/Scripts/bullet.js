@@ -1,5 +1,5 @@
 #pragma strict
-
+/*
 public var Bullet: GameObject;
 public var speed = 20;
 
@@ -19,3 +19,4 @@ function Update ()
 		clone.velocity = transform.TransformDirection (Vector3.forward * speed);
 		}
 	}
+*/

@@ -3,13 +3,12 @@ public var tag : GameObject;
 public var speed : float = 10;
 public var rotationSpeed : float = 10;
 public var Shot : GameObject;
-
-
+public var rigid : Rigidbody;
 
 function Update()
 {
 	var newPos = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
-	transform.position += newPos * Time.deltaTime * speed;
+	rigid.velocity += newPos * speed;
 /*
 	var pos = Camera.main.WorldToScreenPoint(transform.position); 
 	var dir = Input.mousePosition - pos; 								// Follows the mouse and positions it towards it.
