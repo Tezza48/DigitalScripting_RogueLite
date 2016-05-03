@@ -10,10 +10,8 @@ function Start(){
 }
 
 
-function Update()
-{
 
-		if (Vector3.Distance(transform.position, Player.position) >= minDistance);
+		/* if (Vector3.Distance(transform.position, Player.position) >= minDistance);
 		{
 			transform.position += transform.forward * moveSpeed * Time.deltaTime;
 		}	
@@ -21,7 +19,7 @@ function Update()
 			if(Vector3.Distance(transform.position, Player.position) <= maxDistance)
 				{
 		
-		}
-	}
+		} */
+	
 
 
