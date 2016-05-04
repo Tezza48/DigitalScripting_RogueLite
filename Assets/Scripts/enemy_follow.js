@@ -16,8 +16,10 @@ function Update ()
 	{
 		Target = GameObject.FindWithTag ("Player");
 	}
-transform.LookAt (Target.transform);
-
+	transform.LookAt (Target.transform);
+	var rotation = transform.rotation;
+	//var rotation = Quaternion.LookRotation(Target.transform.position, Vector3.up);
+	//transform.rotation = rotation;
 	 var difference:Vector3 = transform.position - Target.transform.position;
 	 var distance:float = difference.magnitude;
 	 
