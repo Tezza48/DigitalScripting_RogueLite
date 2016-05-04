@@ -1,25 +1,22 @@
 #pragma strict
-
+public var ref : enemy_follow;
 public var speed : float;
 
-static var score : int = 0;
-
- 
-
 function Awake () 
-{ 	
-
-GetComponent.<Rigidbody>().AddForce(transform.forward * speed);
-
-}
-
-function OnBecameInvisible () 
-
 {
 	
-	Destroy(gameObject);
-
 }
-
+function OnCollisionEnter (col : Collision)
+{
+    if(col.gameObject.name == "DebugEnemy(Clone)")
+    {
+		Destroy(this.gameObject);
+	}
+	
+    else if(col.gameObject.name == "wall_tile(Clone)")
+    {
+        Destroy(this.gameObject);
+    }
+}
 
 

@@ -1,10 +1,12 @@
-﻿ #pragma strict
-
+﻿#pragma strict
+var Health : int;
 var FollowCharacter : GameObject;
 var distanceFromFollowCharacter : float;
  
-function Start () {
+function Start () 
+{
 GetComponent.<Renderer>().material.color = Color.magenta;
+Health = 10;
 }
 
 function Update () {
@@ -15,4 +17,4 @@ transform.LookAt (FollowCharacter.transform);
 	 
 	 if ( distance <= distanceFromFollowCharacter )
 	 	transform.position = Vector3.MoveTowards(transform.position, FollowCharacter.transform.position, .1);
-}
+	}

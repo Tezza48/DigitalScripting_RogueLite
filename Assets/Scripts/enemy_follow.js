@@ -1,14 +1,17 @@
 ﻿ #pragma strict
-
+var Health : int;
 var Target : GameObject;
 var distanceFromTarget : float;
  
-function Start () {
-if (Target == null)
+function Start () 
 	{
-		Target = GameObject.FindWithTag ("Player");
+Health = 10;
+	
+	if (Target == null)
+		{
+			Target = GameObject.FindWithTag ("Player");
+		}
 	}
-}
 
 function Update () 
 {
@@ -25,4 +28,17 @@ function Update ()
 	 
 	 if ( distance <= distanceFromTarget )
 	 	transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, .1);
+	if (Health <= 0)
+	{
+		Destroy(this.gameObject);
+
+	}
+}
+
+function OnCollisionEnter (col : Collision)
+{
+    if(col.gameObject.name == "bullet(Clone)")
+    {
+		Health--;
+    }
 }
