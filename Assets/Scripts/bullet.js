@@ -6,10 +6,10 @@ static var score : int = 0;
 
  
 
-function Start () 
+function Awake () 
 { 	
 
-GetComponent.<Rigidbody2D>().AddForce(transform.forward * speed);
+GetComponent.<Rigidbody>().AddForce(transform.forward * speed);
 
 }
 

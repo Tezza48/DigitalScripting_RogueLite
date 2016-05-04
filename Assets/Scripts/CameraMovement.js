@@ -1,5 +1,7 @@
 ﻿#pragma strict
-
+var target : Transform;
+var distance : float;
+/*
 var CamSpeed = 1.00;
 var GUIsize = 25;
 
@@ -22,3 +24,18 @@ var recright = Rect (Screen.width-GUIsize, 0, GUIsize, Screen.height);
     if (recright.Contains(Input.mousePosition))
         transform.Translate(CamSpeed, 0, 0, Space.World);
 }
+*/
+
+ function Update(){
+	 if (target == null){
+		target = GameObject.FindWithTag("Player").transform;
+	 }
+ 
+     //transform.position.z = target.position.z -distance;
+     //transform.position.y = target.position.y -distance;
+     //transform.position.x = target.position.x;
+     var offset = (-Vector3.forward * distance) + (Vector3.up * distance);
+     transform.position=target.transform.position + offset;
+
+ 
+ }

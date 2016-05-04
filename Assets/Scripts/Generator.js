@@ -48,18 +48,16 @@ function Start ()
 	spawnedEnemies = new List.<GameObject>();
 	spawnedTorches = new List.<GameObject>();
 
-	SpawnNextDungeon(false, 0f);
+	SpawnNextDungeon(false);
 }
 
 function Update () 
 {
-	Debug.Log((1/Time.deltaTime).ToString("N0") + "Fps");
-	var t = Time.time;
 	if(Input.GetKeyDown(KeyCode.Space))
-		SpawnNextDungeon(true, t);
+		SpawnNextDungeon(true);
 }
 
-function SpawnNextDungeon(clear, t : int)
+function SpawnNextDungeon(clear)
 {
 	if (clear)
 		ClearDungeon();
@@ -67,7 +65,6 @@ function SpawnNextDungeon(clear, t : int)
 	AddTorches();
 	AddEnemies();	
 	AddPlayer();
-	Debug.Log(Time.time*1000 - t*1000 + "ms");
 }
 
 function DrunkenWalk()
