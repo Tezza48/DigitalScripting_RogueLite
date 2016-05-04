@@ -10,10 +10,12 @@ function Update()
 
 {
 
-	var newPos = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+	var newPos = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
 	rigid.velocity = newPos * speed;
-	
-    transform.rotation = Quaternion.LookRotation(newPos);
+	if(newPos != Vector3.zero)
+	{
+		transform.rotation = Quaternion.LookRotation(newPos.normalized);
+	}
 	/*
 	var pos = Camera.main.WorldToScreenPoint(transform.position); 
 	var dir = Input.mousePosition; 								// Follows the mouse and positions it towards it.
