@@ -35,10 +35,16 @@ function Update ()
 	}
 }
 
+/*
 function OnCollisionEnter (col : Collision)
 {
     if(col.gameObject.name == "bullet(Clone)")
     {
-		Health--;
+		Destroy(this.gameObject);
     }
+}
+*/
+function Damage ()
+{
+	Health --;
 }
