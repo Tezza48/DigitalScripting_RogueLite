@@ -1,4 +1,4 @@
-#pragma strict
+﻿#pragma strict
 
 var arrow : Transform;
 var arrowSpawn : Transform;
@@ -7,7 +7,7 @@ var fireArrow = true;
 
 function Update ()
 {
-		if fireArrow == true
+		if (fireArrow == true)
 		{
 			Fire();			
 		}		
@@ -17,8 +17,9 @@ function Update ()
 function Fire ()
 {
 
+	var spawnPoint:Transform;
 	var shootArrow = Instantiate (arrow, spawnPoint.position, Quaternion.identity);
-	shootArrow.rigidbody.AddForce(transform.forward * 500);
+	shootArrow.GetComponent.<Rigidbody>().AddForce(transform.forward * 500);
 	fireArrow = false;
 	Timer();
 
