@@ -1,22 +1,25 @@
 #pragma strict
-/*
-public var Bullet: GameObject;
-public var speed = 20;
 
-function Start ()
-{
-if (Bullet == null)
-	Bullet = GameObject.FindWithTag ("Bullet");
+public var speed : float;
+
+static var score : int = 0;
+
+ 
+
+function Start () 
+{ 	
+
+GetComponent.<Rigidbody2D>().AddForce(transform.forward * speed);
+
 }
 
-function Update ()
+function OnBecameInvisible () 
+
 {
-	if (Input.GetButtonDown("Fire1"))
-	{
-	var clone : Rigidbody;
-		clone = Instantiate (Bullet, transform.position, transform.rotation);
-		
-		clone.velocity = transform.TransformDirection (Vector3.forward * speed);
-		}
-	}
-*/
+	
+	Destroy(gameObject);
+
+}
+
+
+
